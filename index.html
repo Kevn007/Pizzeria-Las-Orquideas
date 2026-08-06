@@ -232,7 +232,7 @@
     <h1>Las Orquídeas</h1>
     <div class="deli">DELI DELI</div>
     <div class="sub">Pepperoni · Hawaiana · Chorizo — $100 &nbsp;|&nbsp; Galicia · Margarette — $140 &nbsp;|&nbsp; Cazadora · 4 Quesos — $160 &nbsp;|&nbsp; Marina · Española — $220 &nbsp;|&nbsp; Combinada — precio del sabor más caro + $25</div>
-    <div class="autosave-nota">💾 Todo se guarda automáticamente en este navegador — si se va la luz o recargas la página, no se pierde nada.</div>
+    <div class="autosave-nota" id="autosaveNota">☁️ Sincronizando pedidos en la nube — se comparten en tiempo real entre todos los dispositivos.</div>
   </header>
 
   <div class="card tema-card">
@@ -411,7 +411,50 @@
 
 <div id="printArea"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
+  // --- Conexión con Firebase (sincroniza pedidos entre todos los dispositivos) ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyBXqiR6xob2WyUu60o2w710v6oydK1VBsc",
+    authDomain: "pizzeria-las-orquideas.firebaseapp.com",
+    projectId: "pizzeria-las-orquideas",
+    storageBucket: "pizzeria-las-orquideas.firebasestorage.app",
+    messagingSenderId: "716522096163",
+    appId: "1:716522096163:web:3b9f9f8151890e84ef5396",
+    measurementId: "G-NWXMNT1LLP"
+  };
+  let dbPedidosRef = null;
+  let nubeConectada = false;
+  try{
+    firebase.initializeApp(firebaseConfig);
+    dbPedidosRef = firebase.firestore().collection('pizzeria').doc('pedidos');
+  }catch(e){ console.error('No se pudo inicializar Firebase:', e); }
+
+  function guardarPedidosEnNube(){
+    if(!dbPedidosRef) return;
+    dbPedidosRef.set({ pedidos, folioContador }).catch(function(err){
+      console.error('Error al sincronizar con la nube:', err);
+    });
+  }
+
+  function escucharPedidosDeNube(){
+    if(!dbPedidosRef) return;
+    dbPedidosRef.onSnapshot(function(doc){
+      nubeConectada = true;
+      if(doc.exists){
+        const data = doc.data();
+        if(Array.isArray(data.pedidos)) pedidos = data.pedidos;
+        if(typeof data.folioContador === 'number') folioContador = data.folioContador;
+      }
+      render();
+    }, function(err){
+      console.error('Error de sincronización en tiempo real:', err);
+      const nota = document.getElementById('autosaveNota');
+      if(nota) nota.textContent = '⚠️ No se pudo conectar con la nube. Revisa tu conexión a internet.';
+    });
+  }
+
   const PRECIOS = { "Pepperoni":100, "Hawaiana":100, "Chorizo":100, "Galicia":140, "Margarette":140, "Cazadora":160, "4 Quesos":160, "Marina":220, "Española":220 };
   const INGREDIENTES = {
     "Pepperoni": "Pepperoni",
@@ -529,7 +572,7 @@
   function guardarEstado(){
     try{
       const estado = {
-        pedidos, folioContador, temaActual, carritoItems, editandoId,
+        temaActual, carritoItems, editandoId,
         form: {
           cliente: $('cliente') ? $('cliente').value : '',
           telefono: $('telefono') ? $('telefono').value : '',
@@ -552,8 +595,6 @@
     }catch(e){ return; }
     if(!estado) return;
 
-    if(Array.isArray(estado.pedidos)) pedidos = estado.pedidos;
-    if(typeof estado.folioContador === 'number') folioContador = estado.folioContador;
     if(Array.isArray(estado.carritoItems)) carritoItems = estado.carritoItems;
     editandoId = estado.editandoId || null;
 
@@ -813,6 +854,7 @@
     });
     limpiarFormulario();
     render();
+    guardarPedidosEnNube();
   }
 
   function cambiarEstado(id, estado){
@@ -820,6 +862,7 @@
     if(!p) return;
     p.estado = estado;
     render();
+    guardarPedidosEnNube();
   }
 
   function editarPedido(id){
@@ -865,6 +908,7 @@
     };
     cancelarEdicion();
     render();
+    guardarPedidosEnNube();
   }
 
   function cancelarEdicion(){
@@ -881,6 +925,7 @@
     pedidos = pedidos.filter(x => x.id !== id);
     if(editandoId === id) cancelarEdicion();
     render();
+    guardarPedidosEnNube();
   }
 
   function vaciarTodo(){
@@ -889,6 +934,7 @@
     pedidos = [];
     cancelarEdicion();
     render();
+    guardarPedidosEnNube();
   }
 
   function limpiarFormulario(){
@@ -1115,6 +1161,7 @@
 
   render();
   cargarEstado();
+  escucharPedidosDeNube();
 </script>
 </body>
 </html>
