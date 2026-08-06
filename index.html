@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Las Orquídeas — Pedidos</title>
+<style>
+  :root{
+    --carbon:#211714;
+    --carbon-2:#2c211c;
+    --masa:#f3e3c3;
+    --tomate:#c8402a;
+    --tomate-2:#e05a3e;
+    --albahaca:#5c7a4a;
+    --queso:#f0c674;
+    --linea:#4a3a30;
+    --muted:#c9b79a;
+    --tomate-rgb:200,64,42;
+    --tomate-2-rgb:224,90,62;
+    --albahaca-rgb:92,122,74;
+    --queso-rgb:240,198,116;
+    --muted-rgb:201,183,154;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--carbon);
+    background-image:
+      radial-gradient(circle at 15% 5%, rgba(var(--tomate-2-rgb),0.10), transparent 40%),
+      radial-gradient(circle at 90% 85%, rgba(var(--albahaca-rgb),0.10), transparent 40%);
+    color:var(--masa);
+    font-family:'Georgia','Iowan Old Style',serif;
+    padding:32px 16px 60px;
+  }
+  .wrap{max-width:900px;margin:0 auto;}
+  header{text-align:center;margin-bottom:26px;border-bottom:2px dashed var(--linea);padding-bottom:20px;}
+  .logo{width:64px;height:64px;margin-bottom:8px;}
+  .eyebrow{letter-spacing:.25em;text-transform:uppercase;font-size:11px;color:var(--tomate-2);font-family:'Helvetica Neue',Arial,sans-serif;font-weight:600;}
+  h1{font-size:36px;margin:6px 0 0;color:var(--queso);font-style:italic;}
+  .deli{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.4em;color:var(--tomate-2);margin:4px 0 10px;}
+  .sub{font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
+  .autosave-nota{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--albahaca);margin-top:8px;}
+
+  .card{background:var(--carbon-2);border:1px solid var(--linea);border-radius:10px;padding:20px 22px;margin-bottom:20px;}
+  .card h2{margin:0 0 16px;font-size:14px;text-transform:uppercase;letter-spacing:.14em;color:var(--tomate-2);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+
+  label{display:block;font-size:11px;font-family:'Helvetica Neue',Arial,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px;}
+  input, select{width:100%;padding:10px 12px;background:var(--carbon);border:1px solid var(--linea);border-radius:6px;color:var(--masa);font-size:15px;font-family:'Helvetica Neue',Arial,sans-serif;}
+  input:focus, select:focus{outline:2px solid var(--tomate-2);outline-offset:1px;}
+
+  .fila-cliente{margin-bottom:18px;}
+  .fila-cliente-tel, .fila-entrega{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:640px){.fila-cliente-tel, .fila-entrega{grid-template-columns:1fr;}}
+
+  .fila-item{display:grid;grid-template-columns:1.4fr 1fr .7fr auto;gap:12px;align-items:end;}
+  @media(max-width:640px){.fila-item{grid-template-columns:1fr 1fr;}}
+
+  button{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:600;font-size:13px;letter-spacing:.03em;padding:11px 18px;border-radius:6px;border:none;cursor:pointer;transition:transform .08s ease,opacity .15s ease;}
+  button:active{transform:scale(0.97);}
+  .btn-add-item{background:var(--albahaca);color:#fff;height:42px;}
+  .btn-agregar{background:var(--tomate);color:#fff;}
+  .btn-guardar{background:var(--albahaca);color:#fff;}
+  .btn-cancelar{background:transparent;color:var(--muted);border:1px solid var(--linea);}
+  .btn-eliminar{background:transparent;color:var(--tomate-2);border:1px solid var(--tomate-2);padding:6px 12px;font-size:12px;}
+  .btn-editar{background:transparent;color:var(--queso);border:1px solid var(--queso);padding:6px 12px;font-size:12px;}
+  .btn-limpiar{background:transparent;color:var(--muted);border:1px solid var(--linea);font-size:11px;padding:6px 10px;}
+  .btn-exportar{background:transparent;color:var(--albahaca);border:1px solid var(--albahaca);font-size:11px;padding:6px 10px;white-space:nowrap;}
+  .btn-imprimir{background:transparent;color:var(--muted);border:1px solid var(--linea);padding:6px 12px;font-size:12px;}
+  .btn-whatsapp{background:#25D366;color:#fff;padding:6px 12px;font-size:12px;}
+  .pedido-direccion{font-size:12px;color:var(--muted);margin-top:2px;}
+  .btn-quitar-mini{background:transparent;color:var(--tomate-2);border:none;font-size:16px;cursor:pointer;line-height:1;padding:2px 6px;}
+  .item-nota{font-style:italic;color:var(--queso);opacity:.85;}
+
+  .extras-label{font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:14px 0 8px;}
+  .extras-label:first-of-type{margin-top:10px;}
+  .extras-label-precio{color:var(--tomate-2);opacity:.8;letter-spacing:0;text-transform:none;font-size:10px;margin-left:4px;}
+  .extras-grid{display:flex;flex-wrap:wrap;gap:8px;}
+
+  .chip{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:8px 14px 8px 10px;
+    border-radius:20px;
+    border:1px solid var(--linea);
+    background:var(--carbon);
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:13px;
+    font-weight:500;
+    color:var(--muted);
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease, color .15s ease, transform .08s ease;
+    user-select:none;
+  }
+  .chip:active{transform:scale(0.97);}
+  .chip:hover{border-color:var(--muted);}
+  .chip input{position:absolute;opacity:0;width:0;height:0;}
+  .chip-check{
+    width:16px;height:16px;flex-shrink:0;border-radius:50%;
+    border:1.5px solid currentColor;opacity:.6;
+    display:flex;align-items:center;justify-content:center;
+    font-size:10px;line-height:1;transition:all .15s ease;
+  }
+  .chip input:checked ~ .chip-check{opacity:1;}
+  .chip input:checked ~ .chip-check::after{content:'✓';font-weight:700;}
+  .chip-precio{font-size:11px;opacity:.7;}
+
+  .extra-custom-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .extra-custom-row .btn-add-item{padding:10px 16px;white-space:nowrap;}
+  .chip-static{background:rgba(var(--queso-rgb),0.14);border-color:var(--queso);color:var(--queso);cursor:default;}
+  .chip-static .btn-quitar-mini{color:inherit;opacity:.75;font-size:14px;padding:0 0 0 4px;}
+  .chip-static .btn-quitar-mini:hover{opacity:1;}
+
+  .precio-tag{
+    display:inline-block;font-size:13px;color:var(--queso);margin-top:6px;
+    font-family:'Helvetica Neue',Arial,sans-serif;font-weight:600;
+    padding:6px 12px;border-radius:6px;background:rgba(var(--queso-rgb),0.08);
+    border:1px solid rgba(var(--queso-rgb),0.25);transition:all .15s ease;
+  }
+
+  .ingredientes-info{
+    margin-top:10px;padding:10px 14px;border-radius:6px;
+    background:rgba(var(--albahaca-rgb),0.08);border:1px dashed var(--albahaca);
+    font-family:'Helvetica Neue',Arial,sans-serif;font-size:12.5px;color:var(--masa);
+    line-height:1.5;white-space:pre-line;
+  }
+  .item-ingredientes{display:block;font-size:11px;color:var(--albahaca);opacity:.85;font-style:italic;margin-top:1px;white-space:pre-line;}
+
+  .estado-select{width:auto;padding:5px 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:20px;cursor:pointer;font-family:'Helvetica Neue',Arial,sans-serif;}
+  .estado-select.estado-pendiente{background:rgba(var(--queso-rgb),0.15);color:var(--queso);border:1px solid var(--queso);}
+  .estado-select.estado-preparando{background:rgba(var(--tomate-2-rgb),0.15);color:var(--tomate-2);border:1px solid var(--tomate-2);}
+  .estado-select.estado-listo{background:rgba(var(--albahaca-rgb),0.2);color:var(--albahaca);border:1px solid var(--albahaca);}
+  .estado-select.estado-entregado{background:rgba(var(--muted-rgb),0.15);color:var(--muted);border:1px solid var(--muted);}
+
+  .filtro-orden{width:190px;}
+  @media(max-width:640px){.filtro-orden{width:100%;}}
+
+  .tema-card{padding:16px 22px;}
+  .tema-toggle{
+    width:100%;text-align:left;background:transparent;color:var(--masa);
+    border:1px solid var(--linea);padding:12px 16px;font-size:14px;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .tema-toggle:hover{border-color:var(--queso);}
+  #temaToggleIcono{transition:transform .15s ease;}
+  .temas-grid{margin-top:14px;}
+  .temas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;}
+  .tema-opcion{
+    position:relative;border-radius:8px;border:2px solid var(--linea);
+    padding:12px;cursor:pointer;background:var(--carbon);
+    transition:border-color .15s ease, transform .08s ease;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+  }
+  .tema-opcion:hover{transform:translateY(-2px);}
+  .tema-opcion.activo{border-color:var(--queso);box-shadow:0 0 0 1px var(--queso);}
+  .tema-swatches{display:flex;gap:6px;margin-bottom:8px;}
+  .tema-swatch{width:22px;height:22px;border-radius:50%;border:1px solid rgba(0,0,0,0.15);}
+  .tema-nombre{font-size:13px;font-weight:700;color:var(--masa);}
+  .tema-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4;}
+  .tema-check{position:absolute;top:10px;right:10px;font-size:14px;color:var(--queso);display:none;}
+  .tema-opcion.activo .tema-check{display:block;}
+
+  .carrito{margin-top:16px;border-top:1px dashed var(--linea);padding-top:14px;}
+  .carrito-titulo{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px;}
+  .carrito-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--linea);font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;}
+  .carrito-item:last-child{border-bottom:none;}
+  .carrito-vacio{font-style:italic;color:#7a6b58;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;padding:6px 0;}
+  .carrito-total{display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:2px dashed var(--linea);font-family:'Helvetica Neue',Arial,sans-serif;}
+  .carrito-total b{color:var(--queso);font-size:18px;}
+
+  .btnrow{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;}
+
+  .buscador{width:220px;}
+  @media(max-width:640px){.buscador{width:100%;}}
+
+  .pedido-box{border:1px solid var(--linea);border-radius:8px;padding:14px 16px;margin-bottom:12px;background:var(--carbon);}
+  .pedido-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif;}
+  .pedido-folio{color:var(--muted);font-size:12px;}
+  .pedido-cliente{font-size:17px;color:var(--masa);}
+  .pedido-total{color:var(--queso);font-size:17px;}
+  .pedido-tel{display:inline-block;margin-top:3px;font-size:13px;color:var(--albahaca);text-decoration:none;font-family:'Helvetica Neue',Arial,sans-serif;}
+  .pedido-tel:hover{text-decoration:underline;}
+  .pedido-entrega{margin-top:8px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--queso);}
+  .pedido-items{margin-top:10px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
+  .pedido-items div{padding:3px 0;}
+  .pedido-acciones{margin-top:10px;display:flex;gap:8px;}
+
+  .vacio{text-align:center;padding:30px 10px;color:#7a6b58;font-style:italic;font-family:'Helvetica Neue',Arial,sans-serif;}
+
+  .total-bar{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-top:16px;border-top:2px dashed var(--linea);flex-wrap:wrap;gap:10px;}
+  .total-label{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
+  .total-valor{font-size:28px;color:var(--queso);}
+  .resumen-mini{display:flex;gap:18px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);flex-wrap:wrap;}
+  .resumen-mini b{color:var(--masa);}
+
+  .edit-flag{display:none;font-size:11px;font-family:'Helvetica Neue',Arial,sans-serif;color:var(--queso);margin-bottom:14px;padding:7px 10px;background:rgba(var(--queso-rgb),0.08);border-left:2px solid var(--queso);}
+
+  /* ---- Ticket de impresión ---- */
+  #printArea{display:none;}
+  .ticket{
+    font-family:'Courier New', monospace;
+    color:#000;
+    width:280px;
+    margin:0 auto;
+  }
+  .ticket h2{text-align:center;margin:0 0 2px;font-size:18px;}
+  .ti-sub{text-align:center;font-size:11px;letter-spacing:.2em;margin-bottom:8px;}
+  .ti-folio{text-align:center;font-size:12px;margin-bottom:6px;}
+  .ticket hr{border:none;border-top:1px dashed #000;margin:8px 0;}
+  .ticket div{font-size:13px;margin:2px 0;}
+  .ti-linea{display:flex;justify-content:space-between;}
+  .ti-total{font-weight:bold;font-size:15px;margin-top:6px;}
+
+  @media print{
+    body *{ visibility:hidden; }
+    #printArea, #printArea *{ visibility:visible; }
+    #printArea{
+      display:block;
+      position:absolute;
+      left:0; top:0;
+      width:100%;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Pizzería</div>
+    <h1>Las Orquídeas</h1>
+    <div class="deli">DELI DELI</div>
+    <div class="sub">Pepperoni · Hawaiana · Chorizo — $100 &nbsp;|&nbsp; Galicia · Margarette — $140 &nbsp;|&nbsp; Cazadora · 4 Quesos — $160 &nbsp;|&nbsp; Marina · Española — $220 &nbsp;|&nbsp; Combinada — precio del sabor más caro + $25</div>
+    <div class="autosave-nota">💾 Todo se guarda automáticamente en este navegador — si se va la luz o recargas la página, no se pierde nada.</div>
+  </header>
+
+  <div class="card tema-card">
+    <button type="button" class="tema-toggle" id="temaToggleBtn" onclick="toggleTemas()">
+      🎨 Elegir estilo de color <span id="temaToggleIcono">▾</span>
+    </button>
+    <div class="temas-grid" id="temasGrid" style="display:none"></div>
+  </div>
+
+  <div class="card">
+    <h2>Nuevo pedido</h2>
+    <div id="editFlag" class="edit-flag">Editando el pedido <b id="editFolio"></b> — al guardar se reemplaza ese registro.</div>
+
+    <div class="fila-cliente fila-cliente-tel">
+      <div>
+        <label for="cliente">Cliente</label>
+        <input id="cliente" type="text" placeholder="Nombre del cliente" oninput="guardarEstado()">
+      </div>
+      <div>
+        <label for="telefono">Teléfono</label>
+        <input id="telefono" type="tel" placeholder="Ej. 271 123 4567" maxlength="12" oninput="formatearTelefono(this); guardarEstado();">
+      </div>
+    </div>
+
+    <div class="fila-cliente fila-entrega">
+      <div>
+        <label for="tipoEntrega">Tipo de pedido</label>
+        <select id="tipoEntrega" onchange="toggleEnvio(); guardarEstado();">
+          <option value="local">Recoger en tienda</option>
+          <option value="domicilio">A domicilio</option>
+        </select>
+      </div>
+      <div id="envioWrap" style="display:none">
+        <label for="costoEnvio">Costo de envío</label>
+        <input id="costoEnvio" type="number" min="0" placeholder="Ej. 30" oninput="renderCarrito()">
+      </div>
+    </div>
+
+    <div class="fila-cliente fila-entrega" id="direccionWrap" style="display:none">
+      <div>
+        <label for="entreCalles">Entre calles</label>
+        <input id="entreCalles" type="text" placeholder="Ej. Entre Morelos y Juárez" oninput="guardarEstado()">
+      </div>
+      <div>
+        <label for="referencia">Referencia</label>
+        <input id="referencia" type="text" placeholder="Ej. Casa azul, portón negro" oninput="guardarEstado()">
+      </div>
+    </div>
+
+    <div class="fila-item">
+      <div>
+        <label for="tipo">Tipo de pizza</label>
+        <select id="tipo" onchange="onTipoChange()">
+          <option value="Pepperoni">Pepperoni — $100</option>
+          <option value="Hawaiana">Hawaiana — $100</option>
+          <option value="Chorizo">Chorizo — $100</option>
+          <option value="Galicia">Galicia — $140</option>
+          <option value="Margarette">Margarette — $140</option>
+          <option value="Cazadora">Cazadora — $160</option>
+          <option value="4 Quesos">4 Quesos — $160</option>
+          <option value="Marina">Marina — $220</option>
+          <option value="Española">Española — $220</option>
+          <option value="Combinada">Combinada (2 sabores)</option>
+        </select>
+      </div>
+      <div>
+        <label for="cantidad">Cantidad</label>
+        <input id="cantidad" type="number" min="1" value="1">
+      </div>
+      <div>
+        <div class="precio-tag" id="precioTag">$100 c/u</div>
+      </div>
+      <div>
+        <button class="btn-add-item" onclick="agregarAlCarrito()">+ Agregar pizza</button>
+      </div>
+    </div>
+
+    <div class="ingredientes-info" id="ingredientesInfo"></div>
+
+    <div class="fila-cliente" style="margin-top:16px">
+      <label for="notaTexto">🍕 Notas para esta pizza (opcional)</label>
+      <input id="notaTexto" type="text" placeholder="Ej. bien cocida, poco picante, para llevar…">
+    </div>
+
+    <div class="fila-cliente" style="margin-top:14px">
+      <label>Extra personalizado (opcional)</label>
+      <div class="extra-custom-row">
+        <input id="extraNombre" type="text" placeholder="Ej. extra champiñones" style="flex:2;min-width:160px">
+        <input id="extraPrecio" type="number" min="0" step="1" placeholder="Precio $" style="flex:1;min-width:90px">
+        <button type="button" class="btn-add-item" onclick="agregarExtraPersonalizado()">+ Añadir extra</button>
+      </div>
+      <div class="extras-grid" id="extrasPersonalizadosLista" style="margin-top:10px"></div>
+    </div>
+
+    <div class="fila-cliente fila-entrega" id="comboWrap" style="display:none">
+      <div>
+        <label for="sabor1">Sabor 1</label>
+        <select id="sabor1" onchange="actualizarPrecioTag(); actualizarIngredientesInfo();">
+          <option value="Pepperoni">Pepperoni</option>
+          <option value="Hawaiana">Hawaiana</option>
+          <option value="Chorizo">Chorizo</option>
+          <option value="Galicia">Galicia</option>
+          <option value="Margarette">Margarette</option>
+          <option value="Cazadora">Cazadora</option>
+          <option value="4 Quesos">4 Quesos</option>
+          <option value="Marina">Marina</option>
+          <option value="Española">Española</option>
+        </select>
+      </div>
+      <div>
+        <label for="sabor2">Sabor 2</label>
+        <select id="sabor2" onchange="actualizarPrecioTag(); actualizarIngredientesInfo();">
+          <option value="Pepperoni">Pepperoni</option>
+          <option value="Hawaiana" selected>Hawaiana</option>
+          <option value="Chorizo">Chorizo</option>
+          <option value="Galicia">Galicia</option>
+          <option value="Margarette">Margarette</option>
+          <option value="Cazadora">Cazadora</option>
+          <option value="4 Quesos">4 Quesos</option>
+          <option value="Marina">Marina</option>
+          <option value="Española">Española</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="carrito">
+      <div class="carrito-titulo">Pizzas en este pedido</div>
+      <div id="carritoLista"></div>
+      <div class="carrito-total">
+        <span>Total del pedido</span>
+        <b id="carritoTotal">$0</b>
+      </div>
+    </div>
+
+    <div class="btnrow">
+      <button class="btn-agregar" id="btnAgregar" onclick="guardarPedidoNuevo()">Guardar pedido</button>
+      <button class="btn-guardar" id="btnGuardar" style="display:none" onclick="guardarEdicion()">Guardar cambios</button>
+      <button class="btn-cancelar" id="btnCancelar" style="display:none" onclick="cancelarEdicion()">Cancelar edición</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>
+      Pedidos registrados
+      <span style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <input class="buscador" id="buscador" type="text" placeholder="Buscar cliente…" oninput="render()">
+        <select class="filtro-orden" id="filtroOrden" onchange="render()">
+          <option value="reciente">Más recientes primero</option>
+          <option value="antiguo">Más antiguos primero</option>
+          <option value="domicilio">Solo a domicilio</option>
+          <option value="local">Solo recoger en tienda</option>
+          <option value="pendiente">Estado: Pendiente</option>
+          <option value="preparando">Estado: Preparando</option>
+          <option value="listo">Estado: Listo</option>
+          <option value="entregado">Estado: Entregado</option>
+        </select>
+        <button class="btn-limpiar" onclick="vaciarTodo()">Vaciar todo</button>
+        <button class="btn-exportar" onclick="exportarTodo()">📋 Guardar todo en bloc de notas</button>
+      </span>
+    </h2>
+
+    <div id="listaPedidos"></div>
+    <div id="vacioMsg" class="vacio" style="display:none">Todavía no hay pedidos. Agrega el primero arriba.</div>
+
+    <div class="total-bar">
+      <div class="resumen-mini" id="resumenMini"></div>
+      <div style="text-align:right">
+        <div class="total-label">🍕 Pizzas vendidas: <span id="contadorPizzas">0</span></div>
+        <div class="total-label" style="margin-top:6px">Total vendido</div>
+        <div class="total-valor" id="totalVenta">$0</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="printArea"></div>
+
+<script>
+  const PRECIOS = { "Pepperoni":100, "Hawaiana":100, "Chorizo":100, "Galicia":140, "Margarette":140, "Cazadora":160, "4 Quesos":160, "Marina":220, "Española":220 };
+  const INGREDIENTES = {
+    "Pepperoni": "Pepperoni",
+    "Hawaiana": "Jamón y piña",
+    "Chorizo": "Chorizo",
+    "Galicia": "Chorizo argentino, cebolla y jalapeño",
+    "Margarette": "Espinaca, cebolla, champiñón y jitomate en rodajas",
+    "Cazadora": "Salchicha, jamón y chorizo",
+    "4 Quesos": "Queso gouda, queso chihuahua, queso crema y parmesano",
+    "Marina": "Alioli, camarón y espinaca",
+    "Española": "Jamón serrano, pera, queso crema, aceitunas negras y miel"
+  };
+  const ESTADOS = { pendiente:'⏳ Pendiente', preparando:'👨\u200d🍳 Preparando', listo:'✅ Listo', entregado:'📦 Entregado' };
+  let pedidos = [];       // pedidos guardados: { id, folio, cliente, items:[{tipo,cantidad,precioUnitario,subtotal}], total }
+  let carritoItems = [];  // pizzas del pedido que se está armando
+  let editandoId = null;
+  let folioContador = 1;
+
+  const TEMAS = {
+    clasico: {
+      nombre: 'Trattoria clásica', desc: 'El estilo actual: carbón oscuro, tomate y albahaca.',
+      vars: {
+        '--carbon':'#211714', '--carbon-2':'#2c211c', '--masa':'#f3e3c3',
+        '--tomate':'#c8402a', '--tomate-2':'#e05a3e', '--albahaca':'#5c7a4a',
+        '--queso':'#f0c674', '--linea':'#4a3a30', '--muted':'#c9b79a',
+        '--tomate-rgb':'200,64,42', '--tomate-2-rgb':'224,90,62', '--albahaca-rgb':'92,122,74',
+        '--queso-rgb':'240,198,116', '--muted-rgb':'201,183,154'
+      }
+    },
+    orquidea: {
+      nombre: 'Orquídea', desc: 'Tonos púrpura y rosa floral, a juego con el nombre.',
+      vars: {
+        '--carbon':'#241726', '--carbon-2':'#301d33', '--masa':'#f2e3ee',
+        '--tomate':'#a83279', '--tomate-2':'#d1499b', '--albahaca':'#7a9b6e',
+        '--queso':'#e8b84b', '--linea':'#4a3350', '--muted':'#c9a8c4',
+        '--tomate-rgb':'168,50,121', '--tomate-2-rgb':'209,73,155', '--albahaca-rgb':'122,155,110',
+        '--queso-rgb':'232,184,75', '--muted-rgb':'201,168,196'
+      }
+    },
+    nocturno: {
+      nombre: 'Nocturno dorado', desc: 'Azul marino profundo con acentos en oro, look elegante.',
+      vars: {
+        '--carbon':'#14212c', '--carbon-2':'#1c2d3a', '--masa':'#f2e9d8',
+        '--tomate':'#8a1f2b', '--tomate-2':'#c9a24b', '--albahaca':'#3f6659',
+        '--queso':'#f0d9a0', '--linea':'#33475a', '--muted':'#a9b7c4',
+        '--tomate-rgb':'138,31,43', '--tomate-2-rgb':'201,162,75', '--albahaca-rgb':'63,102,89',
+        '--queso-rgb':'240,217,160', '--muted-rgb':'169,183,196'
+      }
+    },
+    mediterraneo: {
+      nombre: 'Claro mediterráneo', desc: 'Modo claro: crema, terracota y oliva, muy fresco.',
+      vars: {
+        '--carbon':'#fbf3e6', '--carbon-2':'#ffffff', '--masa':'#3a2c22',
+        '--tomate':'#c1442c', '--tomate-2':'#d97a3f', '--albahaca':'#6b8e4e',
+        '--queso':'#c98a2c', '--linea':'#e3d4bd', '--muted':'#8a7660',
+        '--tomate-rgb':'193,68,44', '--tomate-2-rgb':'217,122,63', '--albahaca-rgb':'107,142,78',
+        '--queso-rgb':'201,138,44', '--muted-rgb':'138,118,96'
+      }
+    },
+    otonal: {
+      nombre: 'Bosque otoñal', desc: 'Cafés y verdes cálidos de temporada, look acogedor.',
+      vars: {
+        '--carbon':'#1f1a12', '--carbon-2':'#2a2318', '--masa':'#f0e6d2',
+        '--tomate':'#a8501f', '--tomate-2':'#c96a2e', '--albahaca':'#4f6b3a',
+        '--queso':'#d9a441', '--linea':'#40361f', '--muted':'#b8a888',
+        '--tomate-rgb':'168,80,31', '--tomate-2-rgb':'201,106,46', '--albahaca-rgb':'79,107,58',
+        '--queso-rgb':'217,164,65', '--muted-rgb':'184,168,136'
+      }
+    },
+    mentaCoral: {
+      nombre: 'Menta y coral', desc: 'Verde menta y coral suave, fresco y moderno.',
+      vars: {
+        '--carbon':'#132420', '--carbon-2':'#1b322c', '--masa':'#e8f5f0',
+        '--tomate':'#e2685a', '--tomate-2':'#f08a72', '--albahaca':'#3fa78a',
+        '--queso':'#f2c46d', '--linea':'#284238', '--muted':'#a9c9bd',
+        '--tomate-rgb':'226,104,90', '--tomate-2-rgb':'240,138,114', '--albahaca-rgb':'63,167,138',
+        '--queso-rgb':'242,196,109', '--muted-rgb':'169,201,189'
+      }
+    },
+    vintageCafe: {
+      nombre: 'Vintage café', desc: 'Sepias y cafés de cafetería antigua, muy cálido.',
+      vars: {
+        '--carbon':'#2b211a', '--carbon-2':'#372c22', '--masa':'#ecdcc4',
+        '--tomate':'#8b4a2b', '--tomate-2':'#b06a3e', '--albahaca':'#6d7a4f',
+        '--queso':'#d4a24c', '--linea':'#4f4032', '--muted':'#bfa789',
+        '--tomate-rgb':'139,74,43', '--tomate-2-rgb':'176,106,62', '--albahaca-rgb':'109,122,79',
+        '--queso-rgb':'212,162,76', '--muted-rgb':'191,167,137'
+      }
+    },
+    neonUrbano: {
+      nombre: 'Neón urbano', desc: 'Rosa y cian vibrantes sobre morado oscuro, estilo llamativo.',
+      vars: {
+        '--carbon':'#120e1a', '--carbon-2':'#1c1630', '--masa':'#eae6ff',
+        '--tomate':'#ff3d7f', '--tomate-2':'#ff6ec7', '--albahaca':'#38e0c4',
+        '--queso':'#ffd23f', '--linea':'#3a2f57', '--muted':'#a99fd1',
+        '--tomate-rgb':'255,61,127', '--tomate-2-rgb':'255,110,199', '--albahaca-rgb':'56,224,196',
+        '--queso-rgb':'255,210,63', '--muted-rgb':'169,159,209'
+      }
+    },
+    desiertoRosa: {
+      nombre: 'Desierto rosa', desc: 'Modo claro con rosa polvo y arena, suave y luminoso.',
+      vars: {
+        '--carbon':'#f7ece6', '--carbon-2':'#fffaf6', '--masa':'#4a3229',
+        '--tomate':'#c76a5b', '--tomate-2':'#dd8a6f', '--albahaca':'#8a9a6e',
+        '--queso':'#c98a4a', '--linea':'#e8d2c4', '--muted':'#9b8172',
+        '--tomate-rgb':'199,106,91', '--tomate-2-rgb':'221,138,111', '--albahaca-rgb':'138,154,110',
+        '--queso-rgb':'201,138,74', '--muted-rgb':'155,129,114'
+      }
+    }
+  };
+  let temaActual = 'clasico';
+
+  const STORAGE_KEY = 'lasOrquideasPedidos_v1';
+
+  function guardarEstado(){
+    try{
+      const estado = {
+        pedidos, folioContador, temaActual, carritoItems, editandoId,
+        form: {
+          cliente: $('cliente') ? $('cliente').value : '',
+          telefono: $('telefono') ? $('telefono').value : '',
+          tipoEntrega: $('tipoEntrega') ? $('tipoEntrega').value : 'local',
+          costoEnvio: $('costoEnvio') ? $('costoEnvio').value : '',
+          entreCalles: $('entreCalles') ? $('entreCalles').value : '',
+          referencia: $('referencia') ? $('referencia').value : ''
+        }
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
+    }catch(e){ /* almacenamiento no disponible en este navegador */ }
+  }
+
+  function cargarEstado(){
+    let estado;
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      estado = JSON.parse(raw);
+    }catch(e){ return; }
+    if(!estado) return;
+
+    if(Array.isArray(estado.pedidos)) pedidos = estado.pedidos;
+    if(typeof estado.folioContador === 'number') folioContador = estado.folioContador;
+    if(Array.isArray(estado.carritoItems)) carritoItems = estado.carritoItems;
+    editandoId = estado.editandoId || null;
+
+    if(estado.form){
+      $('cliente').value = estado.form.cliente || '';
+      $('telefono').value = estado.form.telefono || '';
+      $('tipoEntrega').value = estado.form.tipoEntrega || 'local';
+      $('costoEnvio').value = estado.form.costoEnvio || '';
+      $('entreCalles').value = estado.form.entreCalles || '';
+      $('referencia').value = estado.form.referencia || '';
+    }
+
+    if(estado.temaActual && TEMAS[estado.temaActual]){
+      aplicarTema(estado.temaActual);
+    }
+
+    toggleEnvio();
+    actualizarPrecioTag();
+    actualizarIngredientesInfo();
+    renderCarrito();
+    render();
+
+    if(editandoId){
+      const p = pedidos.find(x => x.id === editandoId);
+      if(p){
+        $('btnAgregar').style.display = 'none';
+        $('btnGuardar').style.display = 'inline-block';
+        $('btnCancelar').style.display = 'inline-block';
+        $('editFlag').style.display = 'block';
+        $('editFolio').textContent = p.folio;
+      } else {
+        editandoId = null;
+      }
+    }
+  }
+
+  function aplicarTema(id){
+    const tema = TEMAS[id];
+    if(!tema) return;
+    Object.entries(tema.vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+    temaActual = id;
+    pintarTemas();
+    guardarEstado();
+  }
+
+  function toggleTemas(){
+    const grid = $('temasGrid');
+    const abierto = grid.style.display !== 'none';
+    grid.style.display = abierto ? 'none' : 'grid';
+    $('temaToggleIcono').style.transform = abierto ? 'rotate(0deg)' : 'rotate(180deg)';
+  }
+
+  function pintarTemas(){
+    const cont = $('temasGrid');
+    cont.innerHTML = Object.entries(TEMAS).map(([id, t]) => `
+      <div class="tema-opcion ${id === temaActual ? 'activo' : ''}" onclick="aplicarTema('${id}')">
+        <span class="tema-check">✓</span>
+        <div class="tema-swatches">
+          <span class="tema-swatch" style="background:${t.vars['--carbon']}"></span>
+          <span class="tema-swatch" style="background:${t.vars['--tomate']}"></span>
+          <span class="tema-swatch" style="background:${t.vars['--queso']}"></span>
+          <span class="tema-swatch" style="background:${t.vars['--albahaca']}"></span>
+        </div>
+        <div class="tema-nombre">${t.nombre}</div>
+        <div class="tema-desc">${t.desc}</div>
+      </div>`).join('');
+  }
+
+  function formatearTelefono(input){
+    let digitos = input.value.replace(/\D/g, '').slice(0, 10);
+    let formateado = digitos;
+    if(digitos.length > 6) formateado = digitos.slice(0,3) + ' ' + digitos.slice(3,6) + ' ' + digitos.slice(6);
+    else if(digitos.length > 3) formateado = digitos.slice(0,3) + ' ' + digitos.slice(3);
+    input.value = formateado;
+  }
+
+  const $ = id => document.getElementById(id);
+  pintarTemas();
+
+  function toggleEnvio(){
+    const esDomicilio = $('tipoEntrega').value === 'domicilio';
+    $('envioWrap').style.display = esDomicilio ? 'block' : 'none';
+    $('direccionWrap').style.display = esDomicilio ? 'grid' : 'none';
+    renderCarrito();
+  }
+
+  function costoEnvioActual(){
+    return $('tipoEntrega').value === 'domicilio' ? (parseInt($('costoEnvio').value, 10) || 0) : 0;
+  }
+
+  function onTipoChange(){
+    $('comboWrap').style.display = $('tipo').value === 'Combinada' ? 'grid' : 'none';
+    actualizarPrecioTag();
+    actualizarIngredientesInfo();
+  }
+
+  function ingredientesDe(tipoSeleccionado){
+    if(tipoSeleccionado === 'Combinada'){
+      const s1 = $('sabor1').value, s2 = $('sabor2').value;
+      return `${s1}: Salsa de tomate, queso, ${INGREDIENTES[s1]}\n${s2}: Salsa de tomate, queso, ${INGREDIENTES[s2]}`;
+    }
+    return `Salsa de tomate, queso, ${INGREDIENTES[tipoSeleccionado] || ''}`;
+  }
+
+  function actualizarIngredientesInfo(){
+    const tipo = $('tipo').value;
+    $('ingredientesInfo').textContent = ingredientesDe(tipo);
+  }
+
+  function precioCombinada(){
+    const s1 = $('sabor1').value, s2 = $('sabor2').value;
+    return Math.max(PRECIOS[s1], PRECIOS[s2]) + 25;
+  }
+
+  let extrasPersonalizados = [];
+
+  function agregarExtraPersonalizado(){
+    const nombre = $('extraNombre').value.trim();
+    const precio = parseFloat($('extraPrecio').value);
+    if(!nombre){ alert('Escribe el nombre del extra.'); return; }
+    if(isNaN(precio) || precio < 0){ alert('Escribe un precio válido para el extra.'); return; }
+    extrasPersonalizados.push({ nombre, precio });
+    $('extraNombre').value = '';
+    $('extraPrecio').value = '';
+    renderExtrasPersonalizados();
+    actualizarPrecioTag();
+  }
+
+  function quitarExtraPersonalizado(idx){
+    extrasPersonalizados.splice(idx, 1);
+    renderExtrasPersonalizados();
+    actualizarPrecioTag();
+  }
+
+  function renderExtrasPersonalizados(){
+    const cont = $('extrasPersonalizadosLista');
+    cont.innerHTML = extrasPersonalizados.map((e, idx) => `
+      <span class="chip chip-static">
+        ${escapeHtml(e.nombre)} <span class="chip-precio">+$${e.precio}</span>
+        <button type="button" class="btn-quitar-mini" onclick="quitarExtraPersonalizado(${idx})" title="Quitar">✕</button>
+      </span>`).join('');
+  }
+
+  function costoExtras(){
+    return extrasPersonalizados.reduce((s, e) => s + e.precio, 0);
+  }
+
+  function actualizarPrecioTag(){
+    const tipo = $('tipo').value;
+    const base = tipo === 'Combinada' ? precioCombinada() : PRECIOS[tipo];
+    const extra = costoExtras();
+    const tag = $('precioTag');
+    if(extra){
+      tag.textContent = `$${base + extra} c/u  ·  +$${extra} en extras`;
+      tag.style.background = 'rgba(var(--tomate-2-rgb),0.14)';
+      tag.style.borderColor = 'rgba(var(--tomate-2-rgb),0.4)';
+      tag.style.color = 'var(--tomate-2)';
+    } else {
+      tag.textContent = `$${base} c/u`;
+      tag.style.background = 'rgba(var(--queso-rgb),0.08)';
+      tag.style.borderColor = 'rgba(var(--queso-rgb),0.25)';
+      tag.style.color = 'var(--queso)';
+    }
+  }
+  actualizarPrecioTag();
+  actualizarIngredientesInfo();
+
+  function agregarAlCarrito(){
+    const tipo = $('tipo').value;
+    const cantidad = parseInt($('cantidad').value, 10);
+    if(!cantidad || cantidad < 1){ alert('La cantidad debe ser un número mayor a 0.'); return; }
+
+    let nombre, precioUnitario;
+    const ingredientes = ingredientesDe(tipo);
+    if(tipo === 'Combinada'){
+      const s1 = $('sabor1').value, s2 = $('sabor2').value;
+      if(s1 === s2){ alert('Elige dos sabores distintos para la combinada.'); return; }
+      nombre = `Combinada (${s1} / ${s2})`;
+      precioUnitario = precioCombinada();
+    } else {
+      nombre = tipo;
+      precioUnitario = PRECIOS[tipo];
+    }
+
+    const nota = $('notaTexto').value.trim();
+    const extraCosto = costoExtras();
+    precioUnitario += extraCosto;
+
+    carritoItems.push({
+      tipo: nombre, cantidad, precioUnitario, subtotal: precioUnitario * cantidad,
+      nota, ingredientes,
+      extras: extrasPersonalizados.map(e => `${e.nombre} (+$${e.precio})`)
+    });
+    $('cantidad').value = 1;
+    $('notaTexto').value = '';
+    extrasPersonalizados = [];
+    renderExtrasPersonalizados();
+    actualizarPrecioTag();
+    renderCarrito();
+  }
+
+  function quitarDelCarrito(idx){
+    carritoItems.splice(idx, 1);
+    renderCarrito();
+  }
+
+  function renderCarrito(){
+    const cont = $('carritoLista');
+    cont.innerHTML = '';
+    if(!carritoItems.length){
+      cont.innerHTML = '<div class="carrito-vacio">Aún no has agregado pizzas a este pedido.</div>';
+    } else {
+      carritoItems.forEach((it, idx) => {
+        const div = document.createElement('div');
+        div.className = 'carrito-item';
+        div.innerHTML = `
+          <span>${it.cantidad} × ${it.tipo}${notaCompleta(it) ? ` <span class="item-nota">(${escapeHtml(notaCompleta(it))})</span>` : ''}${it.ingredientes ? `<span class="item-ingredientes">${escapeHtml(it.ingredientes)}</span>` : ''}</span>
+          <span>$${it.subtotal} <button class="btn-quitar-mini" onclick="quitarDelCarrito(${idx})" title="Quitar">✕</button></span>`;
+        cont.appendChild(div);
+      });
+    }
+    const totalPizzas = carritoItems.reduce((s, it) => s + it.subtotal, 0);
+    const envio = costoEnvioActual();
+    $('carritoTotal').textContent = envio > 0
+      ? `$${totalPizzas + envio} (pizzas $${totalPizzas} + envío $${envio})`
+      : '$' + totalPizzas;
+    guardarEstado();
+  }
+  renderCarrito();
+
+  function guardarPedidoNuevo(){
+    const cliente = $('cliente').value.trim();
+    const telefono = $('telefono').value.trim();
+    if(!cliente){ alert('Escribe el nombre del cliente.'); return; }
+    if(!carritoItems.length){ alert('Agrega al menos una pizza al pedido.'); return; }
+    if($('tipoEntrega').value === 'domicilio' && $('costoEnvio').value.trim() === ''){
+      alert('Indica el costo de envío para este pedido a domicilio.'); return;
+    }
+
+    const tipoEntrega = $('tipoEntrega').value;
+    const envio = costoEnvioActual();
+    const entreCalles = $('entreCalles').value.trim();
+    const referencia = $('referencia').value.trim();
+    const totalPizzas = carritoItems.reduce((s, it) => s + it.subtotal, 0);
+    pedidos.push({
+      id: Date.now(),
+      folio: 'P' + String(folioContador++).padStart(3,'0'),
+      cliente,
+      telefono,
+      tipoEntrega,
+      envio,
+      entreCalles,
+      referencia,
+      items: carritoItems,
+      total: totalPizzas + envio,
+      estado: 'pendiente'
+    });
+    limpiarFormulario();
+    render();
+  }
+
+  function cambiarEstado(id, estado){
+    const p = pedidos.find(x => x.id === id);
+    if(!p) return;
+    p.estado = estado;
+    render();
+  }
+
+  function editarPedido(id){
+    const p = pedidos.find(x => x.id === id);
+    if(!p) return;
+    editandoId = id;
+    $('cliente').value = p.cliente;
+    $('telefono').value = p.telefono || '';
+    $('tipoEntrega').value = p.tipoEntrega || 'local';
+    $('costoEnvio').value = p.envio || '';
+    $('entreCalles').value = p.entreCalles || '';
+    $('referencia').value = p.referencia || '';
+    toggleEnvio();
+    carritoItems = p.items.map(it => ({ ...it }));
+    renderCarrito();
+    $('btnAgregar').style.display = 'none';
+    $('btnGuardar').style.display = 'inline-block';
+    $('btnCancelar').style.display = 'inline-block';
+    $('editFlag').style.display = 'block';
+    $('editFolio').textContent = p.folio;
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function guardarEdicion(){
+    const cliente = $('cliente').value.trim();
+    const telefono = $('telefono').value.trim();
+    if(!cliente){ alert('Escribe el nombre del cliente.'); return; }
+    if(!carritoItems.length){ alert('El pedido necesita al menos una pizza.'); return; }
+    if($('tipoEntrega').value === 'domicilio' && $('costoEnvio').value.trim() === ''){
+      alert('Indica el costo de envío para este pedido a domicilio.'); return;
+    }
+    const idx = pedidos.findIndex(x => x.id === editandoId);
+    if(idx === -1) return;
+    const tipoEntrega = $('tipoEntrega').value;
+    const envio = costoEnvioActual();
+    const entreCalles = $('entreCalles').value.trim();
+    const referencia = $('referencia').value.trim();
+    const totalPizzas = carritoItems.reduce((s, it) => s + it.subtotal, 0);
+    pedidos[idx] = {
+      id: editandoId, folio: pedidos[idx].folio, cliente, telefono,
+      tipoEntrega, envio, entreCalles, referencia, items: carritoItems, total: totalPizzas + envio,
+      estado: pedidos[idx].estado || 'pendiente'
+    };
+    cancelarEdicion();
+    render();
+  }
+
+  function cancelarEdicion(){
+    editandoId = null;
+    limpiarFormulario();
+    $('btnAgregar').style.display = 'inline-block';
+    $('btnGuardar').style.display = 'none';
+    $('btnCancelar').style.display = 'none';
+    $('editFlag').style.display = 'none';
+  }
+
+  function eliminarPedido(id){
+    if(!confirm('¿Eliminar este pedido completo?')) return;
+    pedidos = pedidos.filter(x => x.id !== id);
+    if(editandoId === id) cancelarEdicion();
+    render();
+  }
+
+  function vaciarTodo(){
+    if(!pedidos.length) return;
+    if(!confirm('Esto borrará todos los pedidos registrados. ¿Continuar?')) return;
+    pedidos = [];
+    cancelarEdicion();
+    render();
+  }
+
+  function limpiarFormulario(){
+    $('cliente').value = '';
+    $('telefono').value = '';
+    $('tipoEntrega').value = 'local';
+    $('costoEnvio').value = '';
+    $('entreCalles').value = '';
+    $('referencia').value = '';
+    toggleEnvio();
+    $('cantidad').value = 1;
+    $('notaTexto').value = '';
+    extrasPersonalizados = [];
+    renderExtrasPersonalizados();
+    $('tipo').value = 'Pepperoni';
+    $('comboWrap').style.display = 'none';
+    actualizarPrecioTag();
+    carritoItems = [];
+    renderCarrito();
+  }
+
+  function aplicarFiltroOrden(lista){
+    const modo = $('filtroOrden').value;
+    let resultado = lista.slice();
+    switch(modo){
+      case 'reciente':
+        resultado.reverse();
+        break;
+      case 'antiguo':
+        break;
+      case 'domicilio':
+        resultado = resultado.filter(p => p.tipoEntrega === 'domicilio').reverse();
+        break;
+      case 'local':
+        resultado = resultado.filter(p => p.tipoEntrega === 'local').reverse();
+        break;
+      case 'pendiente':
+      case 'preparando':
+      case 'listo':
+      case 'entregado':
+        resultado = resultado.filter(p => (p.estado || 'pendiente') === modo).reverse();
+        break;
+    }
+    return resultado;
+  }
+
+  function render(){
+    const cont = $('listaPedidos');
+    cont.innerHTML = '';
+    const filtro = $('buscador').value.trim().toLowerCase();
+    let visibles = pedidos.filter(p => p.cliente.toLowerCase().includes(filtro));
+    visibles = aplicarFiltroOrden(visibles);
+
+    $('vacioMsg').style.display = visibles.length ? 'none' : 'block';
+    $('vacioMsg').textContent = pedidos.length && !visibles.length
+      ? 'No hay pedidos que coincidan con la búsqueda.'
+      : 'Todavía no hay pedidos. Agrega el primero arriba.';
+
+    let total = 0, conteoTipos = {};
+    pedidos.forEach(p => {
+      total += p.total;
+      p.items.forEach(it => { conteoTipos[it.tipo] = (conteoTipos[it.tipo] || 0) + it.cantidad; });
+    });
+
+    visibles.forEach(p => {
+      const box = document.createElement('div');
+      box.className = 'pedido-box';
+      const estado = p.estado || 'pendiente';
+      const itemsHtml = p.items.map(it => `<div>${it.cantidad} × ${it.tipo}${notaCompleta(it) ? ` <span class="item-nota">(${escapeHtml(notaCompleta(it))})</span>` : ''} — $${it.subtotal}${it.ingredientes ? `<span class="item-ingredientes">${escapeHtml(it.ingredientes)}</span>` : ''}</div>`).join('');
+      const telHtml = p.telefono
+        ? `<a class="pedido-tel" href="tel:${p.telefono.replace(/\s+/g,'')}">📞 ${escapeHtml(p.telefono)}</a>`
+        : '';
+      const entregaHtml = p.tipoEntrega === 'domicilio'
+        ? `<div class="pedido-entrega">🛵 A domicilio — envío $${p.envio || 0}
+             ${p.entreCalles ? `<div class="pedido-direccion">📍 ${escapeHtml(p.entreCalles)}</div>` : ''}
+             ${p.referencia ? `<div class="pedido-direccion">📝 ${escapeHtml(p.referencia)}</div>` : ''}
+           </div>`
+        : `<div class="pedido-entrega">🏪 Recoger en tienda</div>`;
+      const estadoHtml = `
+        <select class="estado-select estado-${estado}" onchange="cambiarEstado(${p.id}, this.value)">
+          <option value="pendiente" ${estado==='pendiente'?'selected':''}>⏳ Pendiente</option>
+          <option value="preparando" ${estado==='preparando'?'selected':''}>👨‍🍳 Preparando</option>
+          <option value="listo" ${estado==='listo'?'selected':''}>✅ Listo</option>
+          <option value="entregado" ${estado==='entregado'?'selected':''}>📦 Entregado</option>
+        </select>`;
+      const whatsappHtml = p.telefono
+        ? `<button class="btn-whatsapp" onclick="enviarWhatsApp(${p.id})">📲 WhatsApp</button>`
+        : '';
+      box.innerHTML = `
+        <div class="pedido-head">
+          <div>
+            <div class="pedido-folio">${p.folio}</div>
+            <div class="pedido-cliente">${escapeHtml(p.cliente)}</div>
+            ${telHtml}
+          </div>
+          <div style="text-align:right">
+            <div class="pedido-total">$${p.total}</div>
+          </div>
+        </div>
+        ${entregaHtml}
+        <div class="pedido-items">${itemsHtml}</div>
+        <div class="pedido-acciones">
+          ${estadoHtml}
+          <button class="btn-editar" onclick="editarPedido(${p.id})">Editar</button>
+          <button class="btn-eliminar" onclick="eliminarPedido(${p.id})">Eliminar</button>
+          <button class="btn-imprimir" onclick="imprimirPedido(${p.id})">🖨️ Imprimir</button>
+          ${whatsappHtml}
+        </div>`;
+      cont.appendChild(box);
+    });
+
+    let totalPizzasContador = 0;
+    pedidos.forEach(p => p.items.forEach(it => totalPizzasContador += it.cantidad));
+
+    $('totalVenta').textContent = '$' + total;
+    $('contadorPizzas').textContent = totalPizzasContador;
+    $('resumenMini').innerHTML = Object.keys(conteoTipos).length
+      ? Object.entries(conteoTipos).map(([tipo,cant]) => `${tipo}: <b>${cant}</b>`).join(' &nbsp;·&nbsp; ')
+      : '<span>Sin pedidos aún</span>';
+    guardarEstado();
+  }
+
+  function escapeHtml(str){
+    return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  function notaCompleta(it){
+    const partes = [];
+    if(it.nota) partes.push(it.nota);
+    if(it.extras && it.extras.length) partes.push(it.extras.join(', '));
+    return partes.join(' — ');
+  }
+
+  function enviarWhatsApp(id){
+    const p = pedidos.find(x => x.id === id);
+    if(!p) return;
+    if(!p.telefono){ alert('Este pedido no tiene un teléfono registrado.'); return; }
+    const digitos = p.telefono.replace(/\D/g, '');
+    const telConLada = digitos.length === 10 ? '52' + digitos : digitos;
+
+    let msg = `¡Hola ${p.cliente}! 🍕 Este es tu pedido de *Las Orquídeas* (${p.folio}):\n\n`;
+    p.items.forEach(it => {
+      msg += `• ${it.cantidad} x ${it.tipo}`;
+      if(notaCompleta(it)) msg += ` (${notaCompleta(it)})`;
+      msg += ` — $${it.subtotal}\n`;
+    });
+    if(p.tipoEntrega === 'domicilio'){
+      msg += `\n🛵 A domicilio — envío $${p.envio || 0}`;
+      if(p.entreCalles) msg += `\n📍 Entre calles: ${p.entreCalles}`;
+      if(p.referencia) msg += `\n📝 Referencia: ${p.referencia}`;
+    } else {
+      msg += `\n🏪 Para recoger en tienda`;
+    }
+    msg += `\n\n*Total: $${p.total}*\nEstado: ${ESTADOS[p.estado] || ESTADOS.pendiente}\n\n¡Gracias por tu preferencia!`;
+
+    const url = `https://wa.me/${telConLada}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+  }
+
+  function imprimirPedido(id){
+    const p = pedidos.find(x => x.id === id);
+    if(!p) return;
+    const fecha = new Date().toLocaleString('es-MX', { dateStyle:'short', timeStyle:'short' });
+
+    const itemsHtml = p.items.map(it =>
+      `<div class="ti-linea"><span>${it.cantidad} x ${it.tipo}</span><span>$${it.subtotal}</span></div>${notaCompleta(it) ? `<div style="font-size:11px;padding-left:10px;">* ${escapeHtml(notaCompleta(it))}</div>` : ''}`
+    ).join('');
+
+    const entregaHtml = p.tipoEntrega === 'domicilio'
+      ? `<div class="ti-linea"><b>A DOMICILIO</b></div>
+         <div class="ti-linea"><span>Envío</span><span>$${p.envio || 0}</span></div>
+         ${p.entreCalles ? `<div>Entre calles: ${escapeHtml(p.entreCalles)}</div>` : ''}
+         ${p.referencia ? `<div>Referencia: ${escapeHtml(p.referencia)}</div>` : ''}`
+      : `<div><b>RECOGE EN TIENDA</b></div>`;
+
+    $('printArea').innerHTML = `
+      <div class="ticket">
+        <h2>Las Orquídeas</h2>
+        <div class="ti-sub">DELI DELI</div>
+        <div class="ti-folio">${p.folio} — ${fecha}</div>
+        <div class="ti-folio">Estado: ${ESTADOS[p.estado] || ESTADOS.pendiente}</div>
+        <hr>
+        <div>Cliente: ${escapeHtml(p.cliente)}</div>
+        ${p.telefono ? `<div>Tel: ${escapeHtml(p.telefono)}</div>` : ''}
+        <hr>
+        ${entregaHtml}
+        <hr>
+        ${itemsHtml}
+        <hr>
+        <div class="ti-linea ti-total"><span>TOTAL</span><span>$${p.total}</span></div>
+      </div>`;
+
+    window.print();
+  }
+
+  function exportarTodo(){
+    if(!pedidos.length){ alert('No hay pedidos registrados todavía.'); return; }
+    const fecha = new Date().toLocaleString('es-MX', { dateStyle:'long', timeStyle:'short' });
+    let texto = `LA PEQUEÑA LOLITA — DELI DELI\nControl de pedidos — ${fecha}\n${'='.repeat(40)}\n\n`;
+    let totalGeneral = 0, pizzasGeneral = 0;
+
+    pedidos.forEach(p => {
+      totalGeneral += p.total;
+      const itemsTxt = p.items.map(it => { pizzasGeneral += it.cantidad; return `  ${it.cantidad} x ${it.tipo}${notaCompleta(it) ? ' (' + notaCompleta(it) + ')' : ''} - $${it.subtotal}`; }).join('\n');
+      const entregaTxt = p.tipoEntrega === 'domicilio'
+        ? `A domicilio (envío $${p.envio || 0})${p.entreCalles ? ' | Entre calles: ' + p.entreCalles : ''}${p.referencia ? ' | Ref: ' + p.referencia : ''}`
+        : 'Recoge en tienda';
+      const estadoTxt = (ESTADOS[p.estado] || ESTADOS.pendiente).replace(/[⏳👨\u200d🍳✅📦]/g, '').trim();
+      texto += `${p.folio} — ${p.cliente}${p.telefono ? ' — ' + p.telefono : ''}\nEstado: ${estadoTxt}\n${entregaTxt}\n${itemsTxt}\nTOTAL: $${p.total}\n${'-'.repeat(40)}\n`;
+    });
+
+    texto += `\nTOTAL DE PIZZAS VENDIDAS: ${pizzasGeneral}\nTOTAL GENERAL: $${totalGeneral}\n`;
+
+    const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `pedidos_lolita_${new Date().toISOString().slice(0,10)}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  render();
+  cargarEstado();
+</script>
+</body>
+</html>
