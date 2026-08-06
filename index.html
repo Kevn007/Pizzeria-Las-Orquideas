@@ -310,24 +310,7 @@
       </div>
     </div>
 
-    <div class="ingredientes-info" id="ingredientesInfo"></div>
-
-    <div class="fila-cliente" style="margin-top:16px">
-      <label for="notaTexto">🍕 Notas para esta pizza (opcional)</label>
-      <input id="notaTexto" type="text" placeholder="Ej. bien cocida, poco picante, para llevar…">
-    </div>
-
-    <div class="fila-cliente" style="margin-top:14px">
-      <label>Extra personalizado (opcional)</label>
-      <div class="extra-custom-row">
-        <input id="extraNombre" type="text" placeholder="Ej. extra champiñones" style="flex:2;min-width:160px">
-        <input id="extraPrecio" type="number" min="0" step="1" placeholder="Precio $" style="flex:1;min-width:90px">
-        <button type="button" class="btn-add-item" onclick="agregarExtraPersonalizado()">+ Añadir extra</button>
-      </div>
-      <div class="extras-grid" id="extrasPersonalizadosLista" style="margin-top:10px"></div>
-    </div>
-
-    <div class="fila-cliente fila-entrega" id="comboWrap" style="display:none">
+    <div class="fila-cliente fila-entrega" id="comboWrap" style="display:none;margin-top:12px">
       <div>
         <label for="sabor1">Sabor 1</label>
         <select id="sabor1" onchange="actualizarPrecioTag(); actualizarIngredientesInfo();">
@@ -356,6 +339,64 @@
           <option value="Española">Española</option>
         </select>
       </div>
+    </div>
+
+    <div class="ingredientes-info" id="ingredientesInfo"></div>
+
+    <div class="fila-cliente" style="margin-top:16px">
+      <label for="notaTexto">🍕 Notas para esta pizza (opcional)</label>
+      <input id="notaTexto" type="text" placeholder="Ej. bien cocida, poco picante, para llevar…">
+    </div>
+
+    <div class="fila-cliente" style="margin-top:14px">
+      <label>Extra personalizado (opcional)</label>
+      <div class="extra-custom-row">
+        <input id="extraNombre" type="text" placeholder="Ej. extra champiñones" style="flex:2;min-width:160px">
+        <input id="extraPrecio" type="number" min="0" step="1" placeholder="Precio $" style="flex:1;min-width:90px">
+        <button type="button" class="btn-add-item" onclick="agregarExtraPersonalizado()">+ Añadir extra</button>
+      </div>
+      <div class="extras-grid" id="extrasPersonalizadosLista" style="margin-top:10px"></div>
+    </div>
+
+    <div class="fila-item" style="margin-top:18px;border-top:1px dashed var(--linea);padding-top:16px">
+      <div>
+        <label for="tipoFrappe">🥤 Frappé (opcional)</label>
+        <select id="tipoFrappe" onchange="actualizarPrecioFrappeTag()">
+          <optgroup label="$50">
+            <option value="Capuccino">Capuccino</option>
+            <option value="Vainilla">Vainilla</option>
+          </optgroup>
+          <optgroup label="$70">
+            <option value="Moka">Moka</option>
+            <option value="Oreo">Oreo</option>
+          </optgroup>
+          <optgroup label="$85">
+            <option value="Pingüino">Pingüino</option>
+            <option value="Gansito">Gansito</option>
+            <option value="Bubulubu">Bubulubu</option>
+            <option value="Mazapán">Mazapán</option>
+            <option value="Nutella">Nutella</option>
+            <option value="Hershey">Hershey</option>
+            <option value="Piña colada">Piña colada</option>
+          </optgroup>
+        </select>
+      </div>
+      <div>
+        <label for="cantidadFrappe">Cantidad</label>
+        <input id="cantidadFrappe" type="number" min="1" value="1">
+      </div>
+      <div>
+        <div class="precio-tag" id="precioFrappeTag">$50 c/u</div>
+      </div>
+      <div>
+        <button class="btn-add-item" onclick="agregarFrappeAlCarrito()">+ Agregar frappé</button>
+      </div>
+    </div>
+    <div class="fila-cliente" style="margin-top:8px">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input id="frappeAlcohol" type="checkbox" onchange="actualizarPrecioFrappeTag()" style="width:auto">
+        🍸 Con alcohol (precio fijo $95, sin importar el sabor)
+      </label>
     </div>
 
     <div class="carrito">
@@ -462,12 +503,18 @@
     "Chorizo": "Chorizo",
     "Galicia": "Chorizo argentino, cebolla y jalapeño",
     "Margarette": "Espinaca, cebolla, champiñón y jitomate en rodajas",
-    "Cazadora": "Salchicha, jamón y chorizo",
+    "Cazadora": "Salchicha, tocino, pepperoni y chorizo",
     "4 Quesos": "Queso gouda, queso chihuahua, queso crema y parmesano",
     "Marina": "Alioli, camarón y espinaca",
     "Española": "Jamón serrano, pera, queso crema, aceitunas negras y miel"
   };
   const ESTADOS = { pendiente:'⏳ Pendiente', preparando:'👨\u200d🍳 Preparando', listo:'✅ Listo', entregado:'📦 Entregado' };
+  const FRAPPES = {
+    "Capuccino": 50, "Vainilla": 50,
+    "Moka": 70, "Oreo": 70,
+    "Pingüino": 85, "Gansito": 85, "Bubulubu": 85, "Mazapán": 85, "Nutella": 85, "Hershey": 85, "Piña colada": 85
+  };
+  const PRECIO_FRAPPE_ALCOHOL = 95;
   let pedidos = [];       // pedidos guardados: { id, folio, cliente, items:[{tipo,cantidad,precioUnitario,subtotal}], total }
   let carritoItems = [];  // pizzas del pedido que se está armando
   let editandoId = null;
@@ -761,6 +808,31 @@
   }
   actualizarPrecioTag();
   actualizarIngredientesInfo();
+  actualizarPrecioFrappeTag();
+
+  function actualizarPrecioFrappeTag(){
+    const sabor = $('tipoFrappe').value;
+    const conAlcohol = $('frappeAlcohol').checked;
+    const precio = conAlcohol ? PRECIO_FRAPPE_ALCOHOL : (FRAPPES[sabor] || 0);
+    $('precioFrappeTag').textContent = `$${precio} c/u`;
+  }
+
+  function agregarFrappeAlCarrito(){
+    const sabor = $('tipoFrappe').value;
+    const conAlcohol = $('frappeAlcohol').checked;
+    const cantidad = parseInt($('cantidadFrappe').value, 10);
+    if(!cantidad || cantidad < 1){ alert('La cantidad debe ser un número mayor a 0.'); return; }
+    const precioUnitario = conAlcohol ? PRECIO_FRAPPE_ALCOHOL : (FRAPPES[sabor] || 0);
+    const nombre = `🥤 Frappé ${sabor}${conAlcohol ? ' (con alcohol)' : ''}`;
+    carritoItems.push({
+      tipo: nombre, cantidad, precioUnitario, subtotal: precioUnitario * cantidad,
+      nota: '', ingredientes: '', extras: []
+    });
+    $('cantidadFrappe').value = 1;
+    $('frappeAlcohol').checked = false;
+    actualizarPrecioFrappeTag();
+    renderCarrito();
+  }
 
   function agregarAlCarrito(){
     const tipo = $('tipo').value;
@@ -850,7 +922,8 @@
       referencia,
       items: carritoItems,
       total: totalPizzas + envio,
-      estado: 'pendiente'
+      estado: 'pendiente',
+      fechaHora: new Date().toISOString()
     });
     limpiarFormulario();
     render();
@@ -952,6 +1025,9 @@
     $('tipo').value = 'Pepperoni';
     $('comboWrap').style.display = 'none';
     actualizarPrecioTag();
+    $('cantidadFrappe').value = 1;
+    $('frappeAlcohol').checked = false;
+    actualizarPrecioFrappeTag();
     carritoItems = [];
     renderCarrito();
   }
@@ -1026,7 +1102,7 @@
       box.innerHTML = `
         <div class="pedido-head">
           <div>
-            <div class="pedido-folio">${p.folio}</div>
+            <div class="pedido-folio">${p.folio}${p.fechaHora ? ` · ${formatearFechaHora(p.fechaHora)}` : ''}</div>
             <div class="pedido-cliente">${escapeHtml(p.cliente)}</div>
             ${telHtml}
           </div>
@@ -1055,6 +1131,12 @@
       ? Object.entries(conteoTipos).map(([tipo,cant]) => `${tipo}: <b>${cant}</b>`).join(' &nbsp;·&nbsp; ')
       : '<span>Sin pedidos aún</span>';
     guardarEstado();
+  }
+
+  function formatearFechaHora(iso){
+    try{
+      return new Date(iso).toLocaleString('es-MX', { dateStyle:'short', timeStyle:'short' });
+    }catch(e){ return ''; }
   }
 
   function escapeHtml(str){
@@ -1097,7 +1179,7 @@
   function imprimirPedido(id){
     const p = pedidos.find(x => x.id === id);
     if(!p) return;
-    const fecha = new Date().toLocaleString('es-MX', { dateStyle:'short', timeStyle:'short' });
+    const fecha = p.fechaHora ? formatearFechaHora(p.fechaHora) : new Date().toLocaleString('es-MX', { dateStyle:'short', timeStyle:'short' });
 
     const itemsHtml = p.items.map(it =>
       `<div class="ti-linea"><span>${it.cantidad} x ${it.tipo}</span><span>$${it.subtotal}</span></div>${notaCompleta(it) ? `<div style="font-size:11px;padding-left:10px;">* ${escapeHtml(notaCompleta(it))}</div>` : ''}`
@@ -1143,7 +1225,7 @@
         ? `A domicilio (envío $${p.envio || 0})${p.entreCalles ? ' | Entre calles: ' + p.entreCalles : ''}${p.referencia ? ' | Ref: ' + p.referencia : ''}`
         : 'Recoge en tienda';
       const estadoTxt = (ESTADOS[p.estado] || ESTADOS.pendiente).replace(/[⏳👨\u200d🍳✅📦]/g, '').trim();
-      texto += `${p.folio} — ${p.cliente}${p.telefono ? ' — ' + p.telefono : ''}\nEstado: ${estadoTxt}\n${entregaTxt}\n${itemsTxt}\nTOTAL: $${p.total}\n${'-'.repeat(40)}\n`;
+      texto += `${p.folio} — ${p.cliente}${p.telefono ? ' — ' + p.telefono : ''}${p.fechaHora ? '\nFecha y hora: ' + formatearFechaHora(p.fechaHora) : ''}\nEstado: ${estadoTxt}\n${entregaTxt}\n${itemsTxt}\nTOTAL: $${p.total}\n${'-'.repeat(40)}\n`;
     });
 
     texto += `\nTOTAL DE PIZZAS VENDIDAS: ${pizzasGeneral}\nTOTAL GENERAL: $${totalGeneral}\n`;
