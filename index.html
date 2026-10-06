@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Las Orquídeas — Pedidos</title>
+<title>Lolito's Pizzas — Pedidos</title>
 <style>
   :root{
     --carbon:#211714;
@@ -34,10 +34,8 @@
   }
   .wrap{max-width:900px;margin:0 auto;}
   header{text-align:center;margin-bottom:26px;border-bottom:2px dashed var(--linea);padding-bottom:20px;}
-  .logo{width:64px;height:64px;margin-bottom:8px;}
   .eyebrow{letter-spacing:.25em;text-transform:uppercase;font-size:11px;color:var(--tomate-2);font-family:'Helvetica Neue',Arial,sans-serif;font-weight:600;}
-  h1{font-size:36px;margin:6px 0 0;color:var(--queso);font-style:italic;}
-  .deli{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.4em;color:var(--tomate-2);margin:4px 0 10px;}
+  h1{font-size:36px;margin:6px 0 10px;color:var(--queso);font-style:italic;}
   .sub{font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
   .autosave-nota{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--albahaca);margin-top:8px;}
 
@@ -71,9 +69,6 @@
   .btn-quitar-mini{background:transparent;color:var(--tomate-2);border:none;font-size:16px;cursor:pointer;line-height:1;padding:2px 6px;}
   .item-nota{font-style:italic;color:var(--queso);opacity:.85;}
 
-  .extras-label{font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:14px 0 8px;}
-  .extras-label:first-of-type{margin-top:10px;}
-  .extras-label-precio{color:var(--tomate-2);opacity:.8;letter-spacing:0;text-transform:none;font-size:10px;margin-left:4px;}
   .extras-grid{display:flex;flex-wrap:wrap;gap:8px;}
 
   .chip{
@@ -89,21 +84,8 @@
     font-size:13px;
     font-weight:500;
     color:var(--muted);
-    cursor:pointer;
-    transition:border-color .15s ease, background .15s ease, color .15s ease, transform .08s ease;
     user-select:none;
   }
-  .chip:active{transform:scale(0.97);}
-  .chip:hover{border-color:var(--muted);}
-  .chip input{position:absolute;opacity:0;width:0;height:0;}
-  .chip-check{
-    width:16px;height:16px;flex-shrink:0;border-radius:50%;
-    border:1.5px solid currentColor;opacity:.6;
-    display:flex;align-items:center;justify-content:center;
-    font-size:10px;line-height:1;transition:all .15s ease;
-  }
-  .chip input:checked ~ .chip-check{opacity:1;}
-  .chip input:checked ~ .chip-check::after{content:'✓';font-weight:700;}
   .chip-precio{font-size:11px;opacity:.7;}
 
   .extra-custom-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
@@ -144,8 +126,7 @@
   }
   .tema-toggle:hover{border-color:var(--queso);}
   #temaToggleIcono{transition:transform .15s ease;}
-  .temas-grid{margin-top:14px;}
-  .temas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;}
+  .temas-grid{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;}
   .tema-opcion{
     position:relative;border-radius:8px;border:2px solid var(--linea);
     padding:12px;cursor:pointer;background:var(--carbon);
@@ -204,8 +185,7 @@
     width:280px;
     margin:0 auto;
   }
-  .ticket h2{text-align:center;margin:0 0 2px;font-size:18px;}
-  .ti-sub{text-align:center;font-size:11px;letter-spacing:.2em;margin-bottom:8px;}
+  .ticket h2{text-align:center;margin:0 0 8px;font-size:18px;}
   .ti-folio{text-align:center;font-size:12px;margin-bottom:6px;}
   .ticket hr{border:none;border-top:1px dashed #000;margin:8px 0;}
   .ticket div{font-size:13px;margin:2px 0;}
@@ -229,9 +209,8 @@
 
   <header>
     <div class="eyebrow">Pizzería</div>
-    <h1>Las Orquídeas</h1>
-    <div class="deli">DELI DELI</div>
-    <div class="sub">Pepperoni · Hawaiana · Chorizo — $100 &nbsp;|&nbsp; Galicia · Margarette — $140 &nbsp;|&nbsp; Cazadora · 4 Quesos — $160 &nbsp;|&nbsp; Marina · Española — $220 &nbsp;|&nbsp; Combinada — precio del sabor más caro + $25</div>
+    <h1>Lolito's Pizzas</h1>
+    <div class="sub">Pepperoni · Hawaiana · Chorizo — $100 &nbsp;|&nbsp; Galicia · Cazadora · 4 Quesos — $140</div>
     <div class="autosave-nota" id="autosaveNota">☁️ Sincronizando pedidos en la nube — se comparten en tiempo real entre todos los dispositivos.</div>
   </header>
 
@@ -253,7 +232,7 @@
       </div>
       <div>
         <label for="telefono">Teléfono</label>
-        <input id="telefono" type="tel" placeholder="Ej. 271 123 4567" maxlength="12" oninput="formatearTelefono(this); guardarEstado();">
+        <input id="telefono" type="tel" placeholder="Ej. 294 152 4693" maxlength="12" oninput="formatearTelefono(this); guardarEstado();">
       </div>
     </div>
 
@@ -285,17 +264,13 @@
     <div class="fila-item">
       <div>
         <label for="tipo">Tipo de pizza</label>
-        <select id="tipo" onchange="onTipoChange()">
+        <select id="tipo" onchange="actualizarPrecioTag(); actualizarIngredientesInfo();">
           <option value="Pepperoni">Pepperoni — $100</option>
           <option value="Hawaiana">Hawaiana — $100</option>
           <option value="Chorizo">Chorizo — $100</option>
           <option value="Galicia">Galicia — $140</option>
-          <option value="Margarette">Margarette — $140</option>
-          <option value="Cazadora">Cazadora — $160</option>
-          <option value="4 Quesos">4 Quesos — $160</option>
-          <option value="Marina">Marina — $220</option>
-          <option value="Española">Española — $220</option>
-          <option value="Combinada">Combinada (2 sabores)</option>
+          <option value="Cazadora">Cazadora — $140</option>
+          <option value="4 Quesos">4 Quesos — $140</option>
         </select>
       </div>
       <div>
@@ -310,37 +285,6 @@
       </div>
     </div>
 
-    <div class="fila-cliente fila-entrega" id="comboWrap" style="display:none;margin-top:12px">
-      <div>
-        <label for="sabor1">Sabor 1</label>
-        <select id="sabor1" onchange="actualizarPrecioTag(); actualizarIngredientesInfo();">
-          <option value="Pepperoni">Pepperoni</option>
-          <option value="Hawaiana">Hawaiana</option>
-          <option value="Chorizo">Chorizo</option>
-          <option value="Galicia">Galicia</option>
-          <option value="Margarette">Margarette</option>
-          <option value="Cazadora">Cazadora</option>
-          <option value="4 Quesos">4 Quesos</option>
-          <option value="Marina">Marina</option>
-          <option value="Española">Española</option>
-        </select>
-      </div>
-      <div>
-        <label for="sabor2">Sabor 2</label>
-        <select id="sabor2" onchange="actualizarPrecioTag(); actualizarIngredientesInfo();">
-          <option value="Pepperoni">Pepperoni</option>
-          <option value="Hawaiana" selected>Hawaiana</option>
-          <option value="Chorizo">Chorizo</option>
-          <option value="Galicia">Galicia</option>
-          <option value="Margarette">Margarette</option>
-          <option value="Cazadora">Cazadora</option>
-          <option value="4 Quesos">4 Quesos</option>
-          <option value="Marina">Marina</option>
-          <option value="Española">Española</option>
-        </select>
-      </div>
-    </div>
-
     <div class="ingredientes-info" id="ingredientesInfo"></div>
 
     <div class="fila-cliente" style="margin-top:16px">
@@ -349,58 +293,23 @@
     </div>
 
     <div class="fila-cliente" style="margin-top:14px">
-      <label>Extra personalizado (opcional)</label>
+      <label>Extras para esta pizza (opcional)</label>
+      <div class="extras-grid" style="margin-bottom:10px">
+        <button type="button" class="btn-add-item" onclick="agregarExtraRapido('Orilla rellena', 40)">+ Orilla rellena $40</button>
+        <button type="button" class="btn-add-item" onclick="agregarExtraRapido('Mix de queso (gouda y chihuahua)', 40)">+ Mix de queso gouda y chihuahua $40</button>
+      </div>
       <div class="extra-custom-row">
-        <input id="extraNombre" type="text" placeholder="Ej. extra champiñones" style="flex:2;min-width:160px">
+        <input id="extraNombre" type="text" placeholder="Otro extra, ej. extra champiñones" style="flex:2;min-width:160px">
         <input id="extraPrecio" type="number" min="0" step="1" placeholder="Precio $" style="flex:1;min-width:90px">
         <button type="button" class="btn-add-item" onclick="agregarExtraPersonalizado()">+ Añadir extra</button>
       </div>
       <div class="extras-grid" id="extrasPersonalizadosLista" style="margin-top:10px"></div>
     </div>
 
-    <div class="fila-item" style="margin-top:18px;border-top:1px dashed var(--linea);padding-top:16px">
-      <div>
-        <label for="tipoFrappe">🥤 Frappé (opcional)</label>
-        <select id="tipoFrappe" onchange="actualizarPrecioFrappeTag()">
-          <optgroup label="$50">
-            <option value="Capuccino">Capuccino</option>
-            <option value="Vainilla">Vainilla</option>
-          </optgroup>
-          <optgroup label="$70">
-            <option value="Moka">Moka</option>
-            <option value="Oreo">Oreo</option>
-          </optgroup>
-          <optgroup label="$85">
-            <option value="Pingüino">Pingüino</option>
-            <option value="Gansito">Gansito</option>
-            <option value="Bubulubu">Bubulubu</option>
-            <option value="Mazapán">Mazapán</option>
-            <option value="Nutella">Nutella</option>
-            <option value="Hershey">Hershey</option>
-            <option value="Piña colada">Piña colada</option>
-          </optgroup>
-        </select>
-      </div>
-      <div>
-        <label for="cantidadFrappe">Cantidad</label>
-        <input id="cantidadFrappe" type="number" min="1" value="1">
-      </div>
-      <div>
-        <div class="precio-tag" id="precioFrappeTag">$50 c/u</div>
-      </div>
-      <div>
-        <button class="btn-add-item" onclick="agregarFrappeAlCarrito()">+ Agregar frappé</button>
-      </div>
-    </div>
-    <div class="fila-cliente" style="margin-top:8px">
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-        <input id="frappeAlcohol" type="checkbox" onchange="actualizarPrecioFrappeTag()" style="width:auto">
-        🍸 Con alcohol (precio fijo $95, sin importar el sabor)
-      </label>
-    </div>
+    <div id="seccionesExtra"></div>
 
     <div class="carrito">
-      <div class="carrito-titulo">Pizzas en este pedido</div>
+      <div class="carrito-titulo">Productos en este pedido</div>
       <div id="carritoLista"></div>
       <div class="carrito-total">
         <span>Total del pedido</span>
@@ -441,7 +350,7 @@
     <div class="total-bar">
       <div class="resumen-mini" id="resumenMini"></div>
       <div style="text-align:right">
-        <div class="total-label">🍕 Pizzas vendidas: <span id="contadorPizzas">0</span></div>
+        <div class="total-label">🍕 Productos vendidos: <span id="contadorPizzas">0</span></div>
         <div class="total-label" style="margin-top:6px">Total vendido</div>
         <div class="total-valor" id="totalVenta">$0</div>
       </div>
@@ -496,27 +405,44 @@
     });
   }
 
-  const PRECIOS = { "Pepperoni":100, "Hawaiana":100, "Chorizo":100, "Galicia":140, "Margarette":140, "Cazadora":160, "4 Quesos":160, "Marina":220, "Española":220 };
+  // ================== MENÚ (edita aquí precios y productos) ==================
+  const PRECIOS = { "Pepperoni":100, "Hawaiana":100, "Chorizo":100, "Galicia":140, "Cazadora":140, "4 Quesos":140 };
   const INGREDIENTES = {
     "Pepperoni": "Pepperoni",
     "Hawaiana": "Jamón y piña",
     "Chorizo": "Chorizo",
-    "Galicia": "Chorizo argentino, cebolla y jalapeño",
-    "Margarette": "Espinaca, cebolla, champiñón y jitomate en rodajas",
-    "Cazadora": "Salchicha, tocino, pepperoni y chorizo",
-    "4 Quesos": "Queso gouda, queso chihuahua, queso crema y parmesano",
-    "Marina": "Alioli, camarón y espinaca",
-    "Española": "Jamón serrano, pera, queso crema, aceitunas negras y miel"
+    "Galicia": "Chorizo argentino, jalapeño y cebolla",
+    "Cazadora": "Pepperoni, chorizo mexicano y chorizo argentino",
+    "4 Quesos": "Gouda, chihuahua, crema y parmesano"
   };
+  const CATALOGO = {
+    taco: {
+      etiqueta: '🌮 Tacos', prefijo: '🌮 Taco ',
+      items: { "Tripa de leche":18, "Pastor":18, "Con queso":25 }
+    },
+    frappe: {
+      etiqueta: '🥤 Frappé', prefijo: '🥤 Frappé ',
+      items: {
+        "Vainilla":50, "Capuchino":50,
+        "Oreo":70, "Moka":70,
+        "Nutella":85, "Hershey's":85, "Mazapán":85, "Bubulubu":85,
+        "Piña colada":95, "Medias de seda":95
+      }
+    },
+    bebida: {
+      etiqueta: '🍹 Bebidas', prefijo: '🍹 ',
+      items: {
+        "Chelada 1L":70, "Michelada clásica 1L":70,
+        "Michelada Clamato 1L":90, "Michelada tamarindo 1L":90,
+        "Azulitos":90, "Lolicolada":90
+      }
+    }
+  };
+  // ===========================================================================
+
   const ESTADOS = { pendiente:'⏳ Pendiente', preparando:'👨\u200d🍳 Preparando', listo:'✅ Listo', entregado:'📦 Entregado' };
-  const FRAPPES = {
-    "Capuccino": 50, "Vainilla": 50,
-    "Moka": 70, "Oreo": 70,
-    "Pingüino": 85, "Gansito": 85, "Bubulubu": 85, "Mazapán": 85, "Nutella": 85, "Hershey": 85, "Piña colada": 85
-  };
-  const PRECIO_FRAPPE_ALCOHOL = 95;
   let pedidos = [];       // pedidos guardados: { id, folio, cliente, items:[{tipo,cantidad,precioUnitario,subtotal}], total }
-  let carritoItems = [];  // pizzas del pedido que se está armando
+  let carritoItems = [];  // productos del pedido que se está armando
   let editandoId = null;
   let folioContador = 1;
 
@@ -732,31 +658,21 @@
     return $('tipoEntrega').value === 'domicilio' ? (parseInt($('costoEnvio').value, 10) || 0) : 0;
   }
 
-  function onTipoChange(){
-    $('comboWrap').style.display = $('tipo').value === 'Combinada' ? 'grid' : 'none';
-    actualizarPrecioTag();
-    actualizarIngredientesInfo();
-  }
-
   function ingredientesDe(tipoSeleccionado){
-    if(tipoSeleccionado === 'Combinada'){
-      const s1 = $('sabor1').value, s2 = $('sabor2').value;
-      return `${s1}: Salsa de tomate, queso, ${INGREDIENTES[s1]}\n${s2}: Salsa de tomate, queso, ${INGREDIENTES[s2]}`;
-    }
     return `Salsa de tomate, queso, ${INGREDIENTES[tipoSeleccionado] || ''}`;
   }
 
   function actualizarIngredientesInfo(){
-    const tipo = $('tipo').value;
-    $('ingredientesInfo').textContent = ingredientesDe(tipo);
-  }
-
-  function precioCombinada(){
-    const s1 = $('sabor1').value, s2 = $('sabor2').value;
-    return Math.max(PRECIOS[s1], PRECIOS[s2]) + 25;
+    $('ingredientesInfo').textContent = ingredientesDe($('tipo').value);
   }
 
   let extrasPersonalizados = [];
+
+  function agregarExtraRapido(nombre, precio){
+    extrasPersonalizados.push({ nombre, precio });
+    renderExtrasPersonalizados();
+    actualizarPrecioTag();
+  }
 
   function agregarExtraPersonalizado(){
     const nombre = $('extraNombre').value.trim();
@@ -790,8 +706,7 @@
   }
 
   function actualizarPrecioTag(){
-    const tipo = $('tipo').value;
-    const base = tipo === 'Combinada' ? precioCombinada() : PRECIOS[tipo];
+    const base = PRECIOS[$('tipo').value];
     const extra = costoExtras();
     const tag = $('precioTag');
     if(extra){
@@ -806,57 +721,68 @@
       tag.style.color = 'var(--queso)';
     }
   }
-  actualizarPrecioTag();
-  actualizarIngredientesInfo();
-  actualizarPrecioFrappeTag();
 
-  function actualizarPrecioFrappeTag(){
-    const sabor = $('tipoFrappe').value;
-    const conAlcohol = $('frappeAlcohol').checked;
-    const precio = conAlcohol ? PRECIO_FRAPPE_ALCOHOL : (FRAPPES[sabor] || 0);
-    $('precioFrappeTag').textContent = `$${precio} c/u`;
+  // --- Tacos, frappés y bebidas (se generan a partir de CATALOGO) ---
+  function pintarSecciones(){
+    $('seccionesExtra').innerHTML = Object.entries(CATALOGO).map(([k, c]) => {
+      const porPrecio = {};
+      Object.entries(c.items).forEach(([nombre, precio]) => {
+        (porPrecio[precio] = porPrecio[precio] || []).push(nombre);
+      });
+      const opciones = Object.entries(porPrecio).map(([precio, nombres]) =>
+        `<optgroup label="$${precio}">${nombres.map(n => `<option value="${n}">${n}</option>`).join('')}</optgroup>`
+      ).join('');
+      return `
+        <div class="fila-item" style="margin-top:18px;border-top:1px dashed var(--linea);padding-top:16px">
+          <div>
+            <label for="sel-${k}">${c.etiqueta} (opcional)</label>
+            <select id="sel-${k}" onchange="actualizarTag('${k}')">${opciones}</select>
+          </div>
+          <div>
+            <label for="cant-${k}">Cantidad</label>
+            <input id="cant-${k}" type="number" min="1" value="1">
+          </div>
+          <div><div class="precio-tag" id="tag-${k}"></div></div>
+          <div><button class="btn-add-item" onclick="agregarProducto('${k}')">+ Agregar</button></div>
+        </div>`;
+    }).join('');
+    Object.keys(CATALOGO).forEach(actualizarTag);
   }
 
-  function agregarFrappeAlCarrito(){
-    const sabor = $('tipoFrappe').value;
-    const conAlcohol = $('frappeAlcohol').checked;
-    const cantidad = parseInt($('cantidadFrappe').value, 10);
+  function actualizarTag(k){
+    const precio = CATALOGO[k].items[$('sel-' + k).value] || 0;
+    $('tag-' + k).textContent = `$${precio} c/u`;
+  }
+
+  function agregarProducto(k){
+    const c = CATALOGO[k];
+    const nombre = $('sel-' + k).value;
+    const cantidad = parseInt($('cant-' + k).value, 10);
     if(!cantidad || cantidad < 1){ alert('La cantidad debe ser un número mayor a 0.'); return; }
-    const precioUnitario = conAlcohol ? PRECIO_FRAPPE_ALCOHOL : (FRAPPES[sabor] || 0);
-    const nombre = `🥤 Frappé ${sabor}${conAlcohol ? ' (con alcohol)' : ''}`;
+    const precioUnitario = c.items[nombre] || 0;
     carritoItems.push({
-      tipo: nombre, cantidad, precioUnitario, subtotal: precioUnitario * cantidad,
+      tipo: c.prefijo + nombre, cantidad, precioUnitario, subtotal: precioUnitario * cantidad,
       nota: '', ingredientes: '', extras: []
     });
-    $('cantidadFrappe').value = 1;
-    $('frappeAlcohol').checked = false;
-    actualizarPrecioFrappeTag();
+    $('cant-' + k).value = 1;
     renderCarrito();
   }
+
+  pintarSecciones();
+  actualizarPrecioTag();
+  actualizarIngredientesInfo();
 
   function agregarAlCarrito(){
     const tipo = $('tipo').value;
     const cantidad = parseInt($('cantidad').value, 10);
     if(!cantidad || cantidad < 1){ alert('La cantidad debe ser un número mayor a 0.'); return; }
 
-    let nombre, precioUnitario;
     const ingredientes = ingredientesDe(tipo);
-    if(tipo === 'Combinada'){
-      const s1 = $('sabor1').value, s2 = $('sabor2').value;
-      if(s1 === s2){ alert('Elige dos sabores distintos para la combinada.'); return; }
-      nombre = `Combinada (${s1} / ${s2})`;
-      precioUnitario = precioCombinada();
-    } else {
-      nombre = tipo;
-      precioUnitario = PRECIOS[tipo];
-    }
-
     const nota = $('notaTexto').value.trim();
-    const extraCosto = costoExtras();
-    precioUnitario += extraCosto;
+    const precioUnitario = PRECIOS[tipo] + costoExtras();
 
     carritoItems.push({
-      tipo: nombre, cantidad, precioUnitario, subtotal: precioUnitario * cantidad,
+      tipo, cantidad, precioUnitario, subtotal: precioUnitario * cantidad,
       nota, ingredientes,
       extras: extrasPersonalizados.map(e => `${e.nombre} (+$${e.precio})`)
     });
@@ -877,7 +803,7 @@
     const cont = $('carritoLista');
     cont.innerHTML = '';
     if(!carritoItems.length){
-      cont.innerHTML = '<div class="carrito-vacio">Aún no has agregado pizzas a este pedido.</div>';
+      cont.innerHTML = '<div class="carrito-vacio">Aún no has agregado productos a este pedido.</div>';
     } else {
       carritoItems.forEach((it, idx) => {
         const div = document.createElement('div');
@@ -888,11 +814,11 @@
         cont.appendChild(div);
       });
     }
-    const totalPizzas = carritoItems.reduce((s, it) => s + it.subtotal, 0);
+    const totalProductos = carritoItems.reduce((s, it) => s + it.subtotal, 0);
     const envio = costoEnvioActual();
     $('carritoTotal').textContent = envio > 0
-      ? `$${totalPizzas + envio} (pizzas $${totalPizzas} + envío $${envio})`
-      : '$' + totalPizzas;
+      ? `$${totalProductos + envio} (productos $${totalProductos} + envío $${envio})`
+      : '$' + totalProductos;
     guardarEstado();
   }
   renderCarrito();
@@ -901,7 +827,7 @@
     const cliente = $('cliente').value.trim();
     const telefono = $('telefono').value.trim();
     if(!cliente){ alert('Escribe el nombre del cliente.'); return; }
-    if(!carritoItems.length){ alert('Agrega al menos una pizza al pedido.'); return; }
+    if(!carritoItems.length){ alert('Agrega al menos un producto al pedido.'); return; }
     if($('tipoEntrega').value === 'domicilio' && $('costoEnvio').value.trim() === ''){
       alert('Indica el costo de envío para este pedido a domicilio.'); return;
     }
@@ -910,7 +836,7 @@
     const envio = costoEnvioActual();
     const entreCalles = $('entreCalles').value.trim();
     const referencia = $('referencia').value.trim();
-    const totalPizzas = carritoItems.reduce((s, it) => s + it.subtotal, 0);
+    const totalProductos = carritoItems.reduce((s, it) => s + it.subtotal, 0);
     pedidos.push({
       id: Date.now(),
       folio: 'P' + String(folioContador++).padStart(3,'0'),
@@ -921,7 +847,7 @@
       entreCalles,
       referencia,
       items: carritoItems,
-      total: totalPizzas + envio,
+      total: totalProductos + envio,
       estado: 'pendiente',
       fechaHora: new Date().toISOString()
     });
@@ -963,7 +889,7 @@
     const cliente = $('cliente').value.trim();
     const telefono = $('telefono').value.trim();
     if(!cliente){ alert('Escribe el nombre del cliente.'); return; }
-    if(!carritoItems.length){ alert('El pedido necesita al menos una pizza.'); return; }
+    if(!carritoItems.length){ alert('El pedido necesita al menos un producto.'); return; }
     if($('tipoEntrega').value === 'domicilio' && $('costoEnvio').value.trim() === ''){
       alert('Indica el costo de envío para este pedido a domicilio.'); return;
     }
@@ -973,10 +899,10 @@
     const envio = costoEnvioActual();
     const entreCalles = $('entreCalles').value.trim();
     const referencia = $('referencia').value.trim();
-    const totalPizzas = carritoItems.reduce((s, it) => s + it.subtotal, 0);
+    const totalProductos = carritoItems.reduce((s, it) => s + it.subtotal, 0);
     pedidos[idx] = {
       id: editandoId, folio: pedidos[idx].folio, cliente, telefono,
-      tipoEntrega, envio, entreCalles, referencia, items: carritoItems, total: totalPizzas + envio,
+      tipoEntrega, envio, entreCalles, referencia, items: carritoItems, total: totalProductos + envio,
       estado: pedidos[idx].estado || 'pendiente'
     };
     cancelarEdicion();
@@ -1023,11 +949,9 @@
     extrasPersonalizados = [];
     renderExtrasPersonalizados();
     $('tipo').value = 'Pepperoni';
-    $('comboWrap').style.display = 'none';
     actualizarPrecioTag();
-    $('cantidadFrappe').value = 1;
-    $('frappeAlcohol').checked = false;
-    actualizarPrecioFrappeTag();
+    actualizarIngredientesInfo();
+    Object.keys(CATALOGO).forEach(k => { $('cant-' + k).value = 1; });
     carritoItems = [];
     renderCarrito();
   }
@@ -1122,11 +1046,11 @@
       cont.appendChild(box);
     });
 
-    let totalPizzasContador = 0;
-    pedidos.forEach(p => p.items.forEach(it => totalPizzasContador += it.cantidad));
+    let totalProductosContador = 0;
+    pedidos.forEach(p => p.items.forEach(it => totalProductosContador += it.cantidad));
 
     $('totalVenta').textContent = '$' + total;
-    $('contadorPizzas').textContent = totalPizzasContador;
+    $('contadorPizzas').textContent = totalProductosContador;
     $('resumenMini').innerHTML = Object.keys(conteoTipos).length
       ? Object.entries(conteoTipos).map(([tipo,cant]) => `${tipo}: <b>${cant}</b>`).join(' &nbsp;·&nbsp; ')
       : '<span>Sin pedidos aún</span>';
@@ -1157,7 +1081,7 @@
     const digitos = p.telefono.replace(/\D/g, '');
     const telConLada = digitos.length === 10 ? '52' + digitos : digitos;
 
-    let msg = `¡Hola ${p.cliente}! 🍕 Este es tu pedido de *Las Orquídeas* (${p.folio}):\n\n`;
+    let msg = `¡Hola ${p.cliente}! 🍕 Este es tu pedido de *Lolito's Pizzas* (${p.folio}):\n\n`;
     p.items.forEach(it => {
       msg += `• ${it.cantidad} x ${it.tipo}`;
       if(notaCompleta(it)) msg += ` (${notaCompleta(it)})`;
@@ -1194,8 +1118,7 @@
 
     $('printArea').innerHTML = `
       <div class="ticket">
-        <h2>Las Orquídeas</h2>
-        <div class="ti-sub">DELI DELI</div>
+        <h2>Lolito's Pizzas</h2>
         <div class="ti-folio">${p.folio} — ${fecha}</div>
         <div class="ti-folio">Estado: ${ESTADOS[p.estado] || ESTADOS.pendiente}</div>
         <hr>
@@ -1215,12 +1138,12 @@
   function exportarTodo(){
     if(!pedidos.length){ alert('No hay pedidos registrados todavía.'); return; }
     const fecha = new Date().toLocaleString('es-MX', { dateStyle:'long', timeStyle:'short' });
-    let texto = `LA PEQUEÑA LOLITA — DELI DELI\nControl de pedidos — ${fecha}\n${'='.repeat(40)}\n\n`;
-    let totalGeneral = 0, pizzasGeneral = 0;
+    let texto = `LOLITO'S PIZZAS\nControl de pedidos — ${fecha}\n${'='.repeat(40)}\n\n`;
+    let totalGeneral = 0, productosGeneral = 0;
 
     pedidos.forEach(p => {
       totalGeneral += p.total;
-      const itemsTxt = p.items.map(it => { pizzasGeneral += it.cantidad; return `  ${it.cantidad} x ${it.tipo}${notaCompleta(it) ? ' (' + notaCompleta(it) + ')' : ''} - $${it.subtotal}`; }).join('\n');
+      const itemsTxt = p.items.map(it => { productosGeneral += it.cantidad; return `  ${it.cantidad} x ${it.tipo}${notaCompleta(it) ? ' (' + notaCompleta(it) + ')' : ''} - $${it.subtotal}`; }).join('\n');
       const entregaTxt = p.tipoEntrega === 'domicilio'
         ? `A domicilio (envío $${p.envio || 0})${p.entreCalles ? ' | Entre calles: ' + p.entreCalles : ''}${p.referencia ? ' | Ref: ' + p.referencia : ''}`
         : 'Recoge en tienda';
@@ -1228,13 +1151,13 @@
       texto += `${p.folio} — ${p.cliente}${p.telefono ? ' — ' + p.telefono : ''}${p.fechaHora ? '\nFecha y hora: ' + formatearFechaHora(p.fechaHora) : ''}\nEstado: ${estadoTxt}\n${entregaTxt}\n${itemsTxt}\nTOTAL: $${p.total}\n${'-'.repeat(40)}\n`;
     });
 
-    texto += `\nTOTAL DE PIZZAS VENDIDAS: ${pizzasGeneral}\nTOTAL GENERAL: $${totalGeneral}\n`;
+    texto += `\nTOTAL DE PRODUCTOS VENDIDOS: ${productosGeneral}\nTOTAL GENERAL: $${totalGeneral}\n`;
 
     const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `pedidos_lolita_${new Date().toISOString().slice(0,10)}.txt`;
+    a.download = `pedidos_lolitos_${new Date().toISOString().slice(0,10)}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
